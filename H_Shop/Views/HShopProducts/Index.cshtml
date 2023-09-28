@@ -1,0 +1,36 @@
+﻿@using H_Shop.Models
+@model IEnumerable<HShopProduct>
+
+
+@{
+    ViewData["Title"] = "Каталог";
+}
+
+<div class="untree_co-section product-section before-footer-section">
+	<div class="container">
+		<div class="row">
+
+
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-4 col-lg-3 mb-5">
+                    <a class="product-item" asp-controller="Cart" asp-action="Add" asp-route-id="@item.HShopProductID">
+                        @if (item.HShopProductImage != null)
+                        {
+                            var base64 = Convert.ToBase64String(item.HShopProductImage);
+                            var imgSrc = string.Format("data:image/png;base64,{0}", base64);
+                            <img src="@imgSrc" alt="Image" class="img-fluid" style="width: 200px; height: 200px;"> <!-- Adjust the width and height as needed -->
+                        }
+                        <h3 class="product-title">@item.HShopProductName</h3>
+                        <strong class="product-price">@item.HShopProductCost.ToString("C2")</strong>
+                        <span class="icon-cross">
+                            <img src="images/cross.svg" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+            }
+				
+			
+		</div>
+	</div>
+</div>

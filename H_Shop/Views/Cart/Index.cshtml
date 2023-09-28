@@ -1,0 +1,75 @@
+﻿@using H_Shop.Models.ViewModels
+@model CartViewModel
+
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+
+
+
+<div class="untree_co-section before-footer-section">
+    <div class="container">
+        <div class="row mb-5">
+            <form class="col-md-12" method="post">
+                <div class="site-blocks-table">
+                    @if (Model.CartItems.Count > 0)
+                    {
+                        <table class="table">
+                            <tr>
+                                <th></th>
+                                <th>Наименование</th>
+                                <th>Кол-во</th>
+                                <th>Цена</th>
+                                <th>Итог</th>
+                            </tr>
+                            @foreach (var item in Model.CartItems)
+                            {
+                                <tr>
+                                    <td class="product-thumbnail">
+                                        @if (item.Images != null)
+                                        {
+                                            var base64 = Convert.ToBase64String(item.Images);
+                                            var imgSrc = string.Format("data:image/png;base64,{0}", base64);
+                                            <img src="@imgSrc" alt="Image" class="img-fluid" style="width: 100px; height: 100px;">
+                                        }
+                                        
+                                    </td>
+                                    <td>@item.ProductName</td>
+                                    <td>@item.Quantity</td>
+                                    
+                                    <td>@item.Price.ToString("C2")</td>
+                                    
+                                    <td>@Model.CartItems.Where(x => x.ProductId == item.ProductId).Sum(x => x.Quantity * x.Price).ToString("C2")</td>
+                                    <td>
+                                        <a class="btn btn-primary btn-sm" asp-action="Add" asp-route-id="@item.ProductId">+</a>
+                                        <a class="btn btn-info btn-sm" asp-action="Decrease" asp-route-id="@item.ProductId">-</a>
+                                        <a class="btn btn-danger btn-sm" asp-action="Remove" asp-route-id="@item.ProductId">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td class="text-right" colspan="4">Итог: @Model.GrandTotal.ToString("C2")</td>
+                            </tr>
+                            <tr>
+                                <td class="text-right" colspan="4">
+                                    <a class="btn btn-danger" asp-action="Clear">Очистить корзину</a>
+                                    <a class="btn btn-primary" asp-controller="ThankYou" asp-action="Index">Оформить</a>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                    }
+                    else
+                    {
+                        <h2 class="display-4 text-center">Ваша корзина пуста.</h2>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
